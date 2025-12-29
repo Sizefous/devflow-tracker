@@ -17,6 +17,10 @@ professional GitHub workflows, collaboration patterns, and automation.
 
 ## 🛠 Tech Stack
 (To be decided)
+## 📁 Project Structure
+
+├── backend/ # Spring Boot application
+└── frontend/ # React + TypeScript application
 
 ## 🚀 Getting Started
 Instructions will be added soon.
