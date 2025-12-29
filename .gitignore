@@ -1,0 +1,10 @@
+# Node / Python / General
+node_modules/
+.env
+__pycache__/
+*.log
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
