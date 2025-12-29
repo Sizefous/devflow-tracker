@@ -19,8 +19,14 @@ professional GitHub workflows, collaboration patterns, and automation.
 (To be decided)
 ## 📁 Project Structure
 
-├── backend/ # Spring Boot application
-└── frontend/ # React + TypeScript application
+devflow-tracker/
+├── backend/ # Spring Boot application (REST API, business logic)
+└── frontend/ # React + TypeScript application (UI)
+
+### Where to start
+- **Backend:** Add new features under `backend/src/main/java`
+- **Frontend:** UI features live in `frontend/src`
+- Cross-cutting changes should be discussed in an issue first
 
 ## 🚀 Getting Started
 Instructions will be added soon.
