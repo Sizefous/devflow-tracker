@@ -116,5 +116,19 @@ class TaskControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void createTaskFailsWhenTitleIsBlank() throws Exception {
+        String json = """
+            {
+            "title": ""
+            }
+            """;
+
+        mockMvc.perform(post("/api/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
 
 }

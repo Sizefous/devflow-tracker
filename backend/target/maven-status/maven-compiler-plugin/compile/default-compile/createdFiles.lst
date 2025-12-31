@@ -1,7 +1,10 @@
 com/devflow/tracker/model/Task.class
 com/devflow/tracker/controller/HealthController.class
 com/devflow/tracker/controller/TaskController.class
+com/devflow/tracker/exception/GlobalExceptionHandler.class
 com/devflow/tracker/service/HealthService.class
+com/devflow/tracker/dto/TaskRequest.class
+com/devflow/tracker/dto/TaskResponse.class
 com/devflow/tracker/DevflowTrackerApplication.class
 com/devflow/tracker/service/TaskService.class
 com/devflow/tracker/repository/TaskRepository.class
