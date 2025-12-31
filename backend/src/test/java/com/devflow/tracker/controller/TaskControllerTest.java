@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.devflow.tracker.service.TaskService;
 import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -90,16 +92,24 @@ class TaskControllerTest {
             }
             """;
 
-        mockMvc.perform(post("/api/tasks")
+        String response = mockMvc.perform(post("/api/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-        mockMvc.perform(delete("/api/tasks/1"))
+        // Extract id from response
+        ObjectMapper mapper = new ObjectMapper();
+        Long id = mapper.readTree(response).get("id").asLong();
+
+        mockMvc.perform(delete("/api/tasks/" + id))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/tasks/1"))
+        mockMvc.perform(get("/api/tasks/" + id))
                 .andExpect(status().isNotFound());
     }
+
 
 }
