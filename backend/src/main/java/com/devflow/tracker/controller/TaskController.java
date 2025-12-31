@@ -32,7 +32,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<Task> getTaskById(@PathVariable("id") Long id) {
         return taskService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
