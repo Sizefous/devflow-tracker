@@ -1,3 +1,6 @@
-com/devflow/tracker/controller/HealthController.class
+com/devflow/tracker/controller/TaskController.class
 com/devflow/tracker/service/HealthService.class
 com/devflow/tracker/DevflowTrackerApplication.class
+com/devflow/tracker/model/Task.class
+com/devflow/tracker/controller/HealthController.class
+com/devflow/tracker/service/TaskService.class
