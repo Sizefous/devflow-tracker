@@ -1,48 +1,46 @@
 package com.devflow.tracker.service;
 
 import com.devflow.tracker.model.Task;
+import com.devflow.tracker.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
 
-    private final Map<Long, Task> tasks = new HashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong();
+    private final TaskRepository repository;
+
+    public TaskService(TaskRepository repository) {
+        this.repository = repository;
+    }
 
     public Task create(String title) {
-        Long id = idGenerator.incrementAndGet();
-        Task task = new Task(id, title, false);
-        tasks.put(id, task);
-        return task;
+        return repository.save(new Task(title, false));
     }
 
     public List<Task> findAll() {
-        return new ArrayList<>(tasks.values());
+        return repository.findAll();
     }
 
     public Optional<Task> findById(Long id) {
-        return Optional.ofNullable(tasks.get(id));
+        return repository.findById(id);
     }
 
     public Optional<Task> update(Long id, String title, boolean completed) {
-        Task existing = tasks.get(id);
-        if (existing == null) {
-            return Optional.empty();
-        }
-        existing.setTitle(title);
-        existing.setCompleted(completed);
-        return Optional.of(existing);
+        return repository.findById(id).map(task -> {
+            task.setTitle(title);
+            task.setCompleted(completed);
+            return repository.save(task);
+        });
     }
 
     public boolean delete(Long id) {
-        return tasks.remove(id) != null;
+        if (!repository.existsById(id)) {
+            return false;
+        }
+        repository.deleteById(id);
+        return true;
     }
-
-    public void clear() {
-        tasks.clear();
-    }
-
 }

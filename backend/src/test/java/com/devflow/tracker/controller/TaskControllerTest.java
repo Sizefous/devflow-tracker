@@ -9,6 +9,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.devflow.tracker.service.TaskService;
 import org.junit.jupiter.api.BeforeEach;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.test.context.ActiveProfiles;
+import com.devflow.tracker.repository.TaskRepository;
 
 
 
@@ -17,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 class TaskControllerTest {
 
@@ -24,13 +27,15 @@ class TaskControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private TaskService taskService;
+    private TaskRepository taskRepository;
+
 
 
     @BeforeEach
-    void resetState() {
-        taskService.clear();
+    void resetDatabase() {
+        taskRepository.deleteAll();
     }
+
 
     @Test
     void createAndFetchTask() throws Exception {

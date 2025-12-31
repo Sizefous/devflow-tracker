@@ -2,5 +2,6 @@
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/controller/HealthController.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/controller/TaskController.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/model/Task.java
+/home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/repository/TaskRepository.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/service/HealthService.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/service/TaskService.java
