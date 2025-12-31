@@ -1,6 +1,9 @@
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/DevflowTrackerApplication.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/controller/HealthController.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/controller/TaskController.java
+/home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/dto/TaskRequest.java
+/home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/dto/TaskResponse.java
+/home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/exception/GlobalExceptionHandler.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/model/Task.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/repository/TaskRepository.java
 /home/sizefous/devflow-tracker/backend/src/main/java/com/devflow/tracker/service/HealthService.java

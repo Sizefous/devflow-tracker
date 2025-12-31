@@ -1,7 +1,10 @@
 package com.devflow.tracker.controller;
 
+import com.devflow.tracker.dto.TaskRequest;
+import com.devflow.tracker.dto.TaskResponse;
 import com.devflow.tracker.model.Task;
 import com.devflow.tracker.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,48 +21,57 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        if (task.getTitle() == null || task.getTitle().isBlank()) {
-            return ResponseEntity.badRequest().build();
-        }
-        Task created = taskService.create(task.getTitle());
-        return ResponseEntity.ok(created);
+    public ResponseEntity<TaskResponse> createTask(
+            @Valid @RequestBody TaskRequest request) {
+
+        Task created = taskService.create(request.getTitle());
+        return ResponseEntity.ok(toResponse(created));
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.findAll();
+    public List<TaskResponse> getAllTasks() {
+        return taskService.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable("id") Long id) {
+    public ResponseEntity<TaskResponse> getTaskById(
+            @PathVariable("id") Long id) {
+
         return taskService.findById(id)
-                .map(ResponseEntity::ok)
+                .map(task -> ResponseEntity.ok(toResponse(task)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(
+    public ResponseEntity<TaskResponse> updateTask(
             @PathVariable("id") Long id,
-            @RequestBody Task task) {
+            @Valid @RequestBody TaskRequest request) {
 
-
-        if (task.getTitle() == null || task.getTitle().isBlank()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return taskService.update(id, task.getTitle(), task.isCompleted())
-                .map(ResponseEntity::ok)
+        return taskService.update(id, request.getTitle(), request.isCompleted())
+                .map(task -> ResponseEntity.ok(toResponse(task)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteTask(
+            @PathVariable("id") Long id) {
+
         boolean deleted = taskService.delete(id);
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.noContent().build();
+        return deleted
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
+
+    private TaskResponse toResponse(Task task) {
+        return new TaskResponse(
+                task.getId(),
+                task.getTitle(),
+                task.isCompleted()
+        );
+    }
+
 
 }
