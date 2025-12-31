@@ -37,4 +37,56 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("Write tests"));
     }
+
+    @Test
+    void updateTask() throws Exception {
+        String createJson = """
+            {
+            "title": "Initial task"
+            }
+            """;
+
+        String response = mockMvc.perform(post("/api/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createJson))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String updateJson = """
+            {
+            "title": "Updated task",
+            "completed": true
+            }
+            """;
+
+        mockMvc.perform(put("/api/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Updated task"))
+                .andExpect(jsonPath("$.completed").value(true));
+    }
+
+    @Test
+    void deleteTask() throws Exception {
+        String json = """
+            {
+            "title": "Task to delete"
+            }
+            """;
+
+        mockMvc.perform(post("/api/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/api/tasks/1"))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/tasks/1"))
+                .andExpect(status().isNotFound());
+    }
+
 }
