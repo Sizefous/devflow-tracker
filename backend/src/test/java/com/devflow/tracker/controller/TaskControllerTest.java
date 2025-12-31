@@ -6,9 +6,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import com.devflow.tracker.service.TaskService;
+import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -16,6 +22,15 @@ class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private TaskService taskService;
+
+
+    @BeforeEach
+    void resetState() {
+        taskService.clear();
+    }
 
     @Test
     void createAndFetchTask() throws Exception {
@@ -37,4 +52,64 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("Write tests"));
     }
+
+    @Test
+    void updateTask() throws Exception {
+        String createJson = """
+            {
+            "title": "Initial task"
+            }
+            """;
+
+        String response = mockMvc.perform(post("/api/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createJson))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String updateJson = """
+            {
+            "title": "Updated task",
+            "completed": true
+            }
+            """;
+
+        mockMvc.perform(put("/api/tasks/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Updated task"))
+                .andExpect(jsonPath("$.completed").value(true));
+    }
+
+    @Test
+    void deleteTask() throws Exception {
+        String json = """
+            {
+            "title": "Task to delete"
+            }
+            """;
+
+        String response = mockMvc.perform(post("/api/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        // Extract id from response
+        ObjectMapper mapper = new ObjectMapper();
+        Long id = mapper.readTree(response).get("id").asLong();
+
+        mockMvc.perform(delete("/api/tasks/" + id))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/tasks/" + id))
+                .andExpect(status().isNotFound());
+    }
+
+
 }

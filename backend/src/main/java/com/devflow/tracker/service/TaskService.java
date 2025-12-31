@@ -26,4 +26,23 @@ public class TaskService {
     public Optional<Task> findById(Long id) {
         return Optional.ofNullable(tasks.get(id));
     }
+
+    public Optional<Task> update(Long id, String title, boolean completed) {
+        Task existing = tasks.get(id);
+        if (existing == null) {
+            return Optional.empty();
+        }
+        existing.setTitle(title);
+        existing.setCompleted(completed);
+        return Optional.of(existing);
+    }
+
+    public boolean delete(Long id) {
+        return tasks.remove(id) != null;
+    }
+
+    public void clear() {
+        tasks.clear();
+    }
+
 }
