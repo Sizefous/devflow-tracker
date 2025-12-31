@@ -6,9 +6,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import com.devflow.tracker.service.TaskService;
+import org.junit.jupiter.api.BeforeEach;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -16,6 +20,15 @@ class TaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private TaskService taskService;
+
+
+    @BeforeEach
+    void resetState() {
+        taskService.clear();
+    }
 
     @Test
     void createAndFetchTask() throws Exception {

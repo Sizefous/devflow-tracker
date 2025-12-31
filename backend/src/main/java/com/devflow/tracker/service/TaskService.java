@@ -40,4 +40,9 @@ public class TaskService {
     public boolean delete(Long id) {
         return tasks.remove(id) != null;
     }
+
+    public void clear() {
+        tasks.clear();
+    }
+
 }
